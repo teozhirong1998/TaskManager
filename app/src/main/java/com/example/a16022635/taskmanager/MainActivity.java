@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Task> al;
+    ArrayList<String> al;
     ArrayAdapter aa;
     ListView lv;
     Button btnAddTask;
@@ -30,22 +30,15 @@ public class MainActivity extends AppCompatActivity {
 
         btnAddTask = (Button) this.findViewById(R.id.btnAddTask);
         lv = (ListView) this.findViewById(R.id.lv);
-        al = new ArrayList<Task>();
+
+        al = new ArrayList<String>();
+        aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al);
+        lv.setAdapter(aa);
 
         DBHelper db = new DBHelper(MainActivity.this);
         al.clear();
         al.addAll(db.getAllTasks());
-
-        aa = new TasksArrayAdapter(MainActivity.this, R.layout.activity_row, al);
-        lv.setAdapter(aa);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-            }
-        });
+        db.close();
 
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && requestCode == 9){
             lv = (ListView)findViewById(R.id.lv);
-            al = new ArrayList<Task>();
+            al = new ArrayList<String>();
             DBHelper dbh = new DBHelper(MainActivity.this);
             al.clear();
             al.addAll(dbh.getAllTasks());
             dbh.close();
-            aa = new TasksArrayAdapter(this, R.layout.activity_row, al);
+            aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al);
 
             lv.setAdapter(aa);
         }
